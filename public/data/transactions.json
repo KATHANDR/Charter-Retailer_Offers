@@ -1,0 +1,22 @@
+[
+  { "customerid": "C001", "transactionid": "T1001", "amount": 120, "date": "2026-03-03" },
+  { "customerid": "C001", "transactionid": "T1002", "amount": 65, "date": "2026-03-15" },
+  { "customerid": "C002", "transactionid": "T1003", "amount": 200, "date": "2026-03-21" },
+  { "customerid": "C003", "transactionid": "T1004", "amount": 55, "date": "2026-03-27" },
+  { "customerid": "C004", "transactionid": "T1005", "amount": 130, "date": "2026-03-29" },
+  { "customerid": "C005", "transactionid": "T1006", "amount": 90, "date": "2026-04-02" },
+  { "customerid": "C006", "transactionid": "T1007", "amount": 145, "date": "2026-04-07" },
+  { "customerid": "C007", "transactionid": "T1008", "amount": 50, "date": "2026-04-12" },
+  { "customerid": "C008", "transactionid": "T1009", "amount": 250, "date": "2026-04-18" },
+  { "customerid": "C009", "transactionid": "T1010", "amount": 105, "date": "2026-04-25" },
+  { "customerid": "C010", "transactionid": "T1011", "amount": 75, "date": "2026-05-04" },
+  { "customerid": "C011", "transactionid": "T1012", "amount": 160, "date": "2026-05-09" },
+  { "customerid": "C012", "transactionid": "T1013", "amount": 49, "date": "2026-05-13" },
+  { "customerid": "C013", "transactionid": "T1014", "amount": 118, "date": "2026-05-18" },
+  { "customerid": "C014", "transactionid": "T1015", "amount": 85, "date": "2026-05-22" },
+  { "customerid": "C015", "transactionid": "T1016", "amount": 220, "date": "2026-05-26" },
+  { "customerid": "C001", "transactionid": "T1017", "amount": 180, "date": "2026-05-28" },
+  { "customerid": "C002", "transactionid": "T1018", "amount": 75, "date": "2026-04-28" },
+  { "customerid": "C003", "transactionid": "T1019", "amount": 105, "date": "2026-05-01" },
+  { "customerid": "C004", "transactionid": "T1020", "amount": 42, "date": "2026-05-03" }
+]
