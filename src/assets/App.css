@@ -157,8 +157,25 @@ h1 {
   gap: 18px;
 }
 
+.customer-details-header h2 {
+  margin: 0;
+}
+
+.customer-header-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.customer-details-header .customer-id {
+  font-weight: 400;
+  color: #475569;
+}
+
 .customer-points {
-  margin: 8px 0 0;
+  margin: 0;
   color: #4b5563;
 }
 

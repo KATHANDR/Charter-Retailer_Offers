@@ -56,6 +56,9 @@ npm test
 This project is intentionally written in plain React JS and follows common file naming conventions and component separation for readability and maintainability.
 
 ## UI
+<img width="844" height="468" alt="image" src="https://github.com/user-attachments/assets/cab24385-70c5-477e-968f-b1494c50cfb0" />
 
 
 ## Tests cases
+
+<img width="557" height="244" alt="image" src="https://github.com/user-attachments/assets/8d2c0190-8ef9-4e25-aa84-cfab618bff75" />

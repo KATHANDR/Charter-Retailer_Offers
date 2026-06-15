@@ -1,6 +1,18 @@
+import { ALL_MONTHS_VALUE } from '../constants/appConstants'
+
 export function getMonthLabel(dateString) {
   const date = new Date(dateString)
   return date.toLocaleString('en-US', { month: 'long', year: 'numeric' })
+}
+
+export function getMonthName(dateString) {
+  const date = new Date(dateString)
+  return date.toLocaleString('en-US', { month: 'long' })
+}
+
+export function getYearLabel(dateString) {
+  const date = new Date(dateString)
+  return date.getFullYear().toString()
 }
 
 export function calculateRewardPoints(amount) {
@@ -12,14 +24,16 @@ export function calculateRewardPoints(amount) {
 export function aggregateRewardsByCustomer(transactions) {
   const customers = {}
 
-  transactions.forEach(({ customerid, transactionid, amount, date }) => {
+  transactions.forEach(({ customerid, customerName, transactionid, amount, date }) => {
     const month = getMonthLabel(date)
     const points = calculateRewardPoints(amount)
 
     if (!customers[customerid]) {
       customers[customerid] = {
+        customerName: customerName || customerid,
         monthly: {},
         totalPoints: 0,
+        totalTransactions: 0,
       }
     }
 
@@ -39,15 +53,31 @@ export function aggregateRewardsByCustomer(transactions) {
     })
     customerData.monthly[month].totalPoints += points
     customerData.totalPoints += points
+    customerData.totalTransactions += 1
   })
 
   return customers
 }
 
+export function filterTransactionsByDate(transactions, yearFilter, monthFilter) {
+  return transactions.filter((transaction) => {
+    const transactionYear = getYearLabel(transaction.date)
+    const transactionMonth = getMonthName(transaction.date)
+
+    const matchesYear = yearFilter === ALL_MONTHS_VALUE || transactionYear === yearFilter
+    const matchesMonth = monthFilter === ALL_MONTHS_VALUE || transactionMonth === monthFilter
+
+    return matchesYear && matchesMonth
+  })
+}
+
+export function getAvailableYears(transactions) {
+  const yearSet = new Set(transactions.map(({ date }) => getYearLabel(date)))
+  return Array.from(yearSet).sort((left, right) => Number(right) - Number(left))
+}
+
 export function getRecentMonths(transactions, count = 3) {
-  const monthSet = new Set(
-    transactions.map(({ date }) => getMonthLabel(date)),
-  )
+  const monthSet = new Set(transactions.map(({ date }) => getMonthLabel(date)))
 
   return Array.from(monthSet)
     .sort((left, right) => {
@@ -63,7 +93,10 @@ export function filterAndSortCustomers(rewardSummary, searchQuery, sortOption) {
 
   const filteredCustomers = Object.entries(rewardSummary)
     .map(([customerid, customerData]) => {
-      const customerMatches = customerid.toLowerCase().includes(normalizedQuery)
+      const customerMatches =
+        customerid.toLowerCase().includes(normalizedQuery) ||
+        customerData.customerName.toLowerCase().includes(normalizedQuery)
+
       const transactionsMatch = Object.values(customerData.monthly).some((monthData) =>
         monthData.transactions.some((tx) =>
           tx.transactionid.toLowerCase().includes(normalizedQuery),

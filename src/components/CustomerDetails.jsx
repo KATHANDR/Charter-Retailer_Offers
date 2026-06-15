@@ -1,7 +1,9 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
-function CustomerDetails({ customerId, customerData, recentMonths }) {
-  if (!customerId) {
+// Displays the rewards detail panel for the selected customer.
+function CustomerDetails({ customerId, customerData, recentMonths, viewMode }) {
+  if (!customerId || !customerData) {
     return (
       <section className="customer-details empty-state">
         <h2>Select a customer to view reward details.</h2>
@@ -9,13 +11,16 @@ function CustomerDetails({ customerId, customerData, recentMonths }) {
     )
   }
 
-  const selectedMonths = recentMonths.filter((month) => customerData.monthly[month])
+  const customerName = customerData.customerName || customerId
+  const monthsToRender = viewMode === 'all'
+    ? Object.keys(customerData.monthly)
+    : recentMonths.filter((month) => customerData.monthly[month])
 
-  if (selectedMonths.length === 0) {
+  if (monthsToRender.length === 0) {
     return (
       <section className="customer-details empty-state">
-        <h2>{customerId}</h2>
-        <p>No transactions exist for the recent months.</p>
+        <h2>{customerName}</h2>
+        <p>No transactions exist for the selected filters.</p>
       </section>
     )
   }
@@ -24,18 +29,28 @@ function CustomerDetails({ customerId, customerData, recentMonths }) {
     <section className="customer-details">
       <div className="customer-details-header">
         <div>
-          <h2>Customer {customerId}</h2>
-          <p className="customer-points">Total points: {customerData.totalPoints} pts</p>
+          <h2>
+            <strong>{customerName}</strong>
+            <span className="customer-id"> ({customerId})</span>
+          </h2>
+          <p className="customer-points">
+            Total points: {customerData.totalPoints.toFixed(1)} pts
+          </p>
+          {viewMode === 'all' && (
+            <p className="customer-transactions-count">
+              Total transactions: {customerData.totalTransactions}
+            </p>
+          )}
         </div>
       </div>
 
-      {selectedMonths.map((month) => {
+      {monthsToRender.map((month) => {
         const monthData = customerData.monthly[month]
         return (
           <div className="month-section" key={`${customerId}-${month}`}>
             <div className="month-section-header">
               <h3>{month}</h3>
-              <span>{monthData.totalPoints} pts</span>
+              <span>{monthData.totalPoints.toFixed(1)} pts</span>
             </div>
 
             <div className="month-transactions">
@@ -54,11 +69,11 @@ function CustomerDetails({ customerId, customerData, recentMonths }) {
                   </div>
                   <div className="transaction-card-row">
                     <span className="transaction-label">Amount</span>
-                    <span>${transaction.amount}</span>
+                    <span>${transaction.amount.toFixed(2)}</span>
                   </div>
                   <div className="transaction-card-row transaction-points-row">
                     <span className="transaction-label">Points</span>
-                    <strong>{transaction.points} pts</strong>
+                    <strong>{transaction.points.toFixed(1)} pts</strong>
                   </div>
                 </article>
               ))}
@@ -68,6 +83,30 @@ function CustomerDetails({ customerId, customerData, recentMonths }) {
       })}
     </section>
   )
+}
+
+CustomerDetails.propTypes = {
+  customerId: PropTypes.string,
+  customerData: PropTypes.shape({
+    customerName: PropTypes.string,
+    totalPoints: PropTypes.number.isRequired,
+    totalTransactions: PropTypes.number.isRequired,
+    monthly: PropTypes.objectOf(
+      PropTypes.shape({
+        totalPoints: PropTypes.number.isRequired,
+        transactions: PropTypes.arrayOf(
+          PropTypes.shape({
+            transactionid: PropTypes.string.isRequired,
+            date: PropTypes.string.isRequired,
+            amount: PropTypes.number.isRequired,
+            points: PropTypes.number.isRequired,
+          }),
+        ).isRequired,
+      }),
+    ).isRequired,
+  }),
+  recentMonths: PropTypes.arrayOf(PropTypes.string).isRequired,
+  viewMode: PropTypes.string.isRequired,
 }
 
 export default React.memo(CustomerDetails)

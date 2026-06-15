@@ -1,5 +1,7 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
+// Renders the sidebar list of customers and allows selecting a customer.
 function CustomerList({ customers, selectedCustomerId, onSelectCustomer }) {
   return (
     <aside className="customer-list-panel">
@@ -20,15 +22,22 @@ function CustomerList({ customers, selectedCustomerId, onSelectCustomer }) {
             }
             onClick={() => onSelectCustomer(customerid)}
           >
+               <span><strong>{customerData.customerName}</strong></span>
+            <span>{customerid}</span>
             <div>
-              <strong>{customerid}</strong>
-              <p>{customerData.totalPoints} pts</p>
+              <span>{customerData.totalPoints.toFixed(1)} pts</span>
             </div>
           </button>
         ))}
       </div>
     </aside>
   )
+}
+
+CustomerList.propTypes = {
+  customers: PropTypes.arrayOf(PropTypes.array).isRequired,
+  selectedCustomerId: PropTypes.string,
+  onSelectCustomer: PropTypes.func.isRequired,
 }
 
 export default React.memo(CustomerList)
